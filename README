@@ -1,0 +1,7 @@
+This is a silly little rabit-hole project which was initially a bash script that I ran via
+cron. At some point I decided I wanted to run it as a launchagent because cron jobs won't
+"catch up" if the machine was in sleep mode at the scheduled time. With launchagent and recent
+osx versions, the app needs "full disk access" for some reason. Except the app is this case is
+bash, and not my script itself. That started to feel like I was opening my machine to all sorts
+of abuse.
+Remembering how easy it is to run shell commands in Kotlin, I figured I'd give kotlin native a go.
