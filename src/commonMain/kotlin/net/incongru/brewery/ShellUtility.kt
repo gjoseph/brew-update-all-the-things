@@ -12,6 +12,7 @@ import kotlinx.cinterop.ptr
 import kotlinx.cinterop.refTo
 import kotlinx.cinterop.set
 import kotlinx.cinterop.value
+import kotlinx.serialization.json.Json
 import platform.posix.execvp
 import platform.posix.exit
 import platform.posix.fork
@@ -23,6 +24,12 @@ import platform.posix.waitpid
 
 //import platform.darwin.*
 
+val json: Json by lazy {
+    Json {
+        ignoreUnknownKeys=true
+    }
+}
+
 @OptIn(ExperimentalForeignApi::class)
 fun String.runCommand(exitOnFail: Boolean = true): Int {
     val ret = system(this)
@@ -30,6 +37,13 @@ fun String.runCommand(exitOnFail: Boolean = true): Int {
         exit(ret)
     }
     return ret
+}
+
+
+@OptIn(ExperimentalForeignApi::class)
+inline fun <reified T> String.runCommandAndCaptureOutputAs(): T {
+    val outputStr = this.runCommandAndCaptureOutput()
+    return json.decodeFromString<T>(outputStr)
 }
 
 @OptIn(ExperimentalForeignApi::class)

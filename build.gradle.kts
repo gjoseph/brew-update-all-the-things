@@ -20,7 +20,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-//                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1") // Replace with your actual dependency
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
             }
         }
     }
