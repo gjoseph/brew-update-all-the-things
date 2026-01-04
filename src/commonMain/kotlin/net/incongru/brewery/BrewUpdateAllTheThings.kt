@@ -62,7 +62,7 @@ private fun List<BrewFormula>.asCliArgs(): String {
 }
 
 fun main() {
-    notif("Brew upgrade starting")
+    notif("Brew upgrade starting 😊")
     log("Updating Homebrew:")
     "brew update".runCommand()
 
@@ -89,19 +89,19 @@ fun main() {
 
         if (confirm(
                 "🥜 Brew upgrade ready",
-                "Outdated formulae: ${outdated.formulae}\n" +
-                        "Outdated casks: ${outdated.casks}\n\n" +
+                "Outdated formulae: ${formulaeToUpdate}\n" +
+                        "Outdated casks: ${casksToUpdate}\n\n" +
                         "Do you want to install them now?"
             )
         ) {
             runUpgrade(false, formulaeToUpdate, casksToUpdate)
-            notif("All your Homebrew packages are up-to-date")
+            notif("All your Homebrew packages are up-to-date 😀")
         } else {
             log("Kthxbye")
         }
     } else {
         log("Nothing to upgrade")
-        notif(".... there was nothing to upgrade")
+        notif(".... there was nothing to upgrade 😏")
     }
 }
 
