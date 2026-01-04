@@ -5,3 +5,29 @@ osx versions, the app needs "full disk access" for some reason. Except the app i
 bash, and not my script itself. That started to feel like I was opening my machine to all sorts
 of abuse.
 Remembering how easy it is to run shell commands in Kotlin, I figured I'd give kotlin native a go.
+
+
+TODO Setup launchagent
+ - see https://github.com/vinceglb/AutoLaunch/blob/main/auto-launch/src/commonMain/kotlin/io/github/vinceglb/autolaunch/AutoLaunch.kt
+ - https://launchd.info/
+ - previously tried:
+lunchy install -s ~/bin/brew-update-launchctl.plist
+lunchy start -w brew-update-launchctl
+
+fails with i/o error - with the real launchctl commands, the only way to get even a simple test job to run is to use the gui context, so
+the stuff about process type of limitloat to session type might help!?
+
+stuff like this might help too?!?
+<key>ProcessType</key>
+<string>Background</string>
+<key>LimitLoadToSessionType</key>
+<string>Aqua</string>
+
+<key>KeepAlive</key>
+    <dict>
+          <key>SuccessfulExit</key>
+When set to true the job will be restarted until it fails.
+Setting this value to false will restart the job until it succeeds.
+
+    <key>ThrottleInterval</key>
+    <integer>60</integer>
