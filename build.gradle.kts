@@ -1,9 +1,10 @@
 plugins {
-    kotlin("multiplatform") version "2.2.20"
+    kotlin("multiplatform") version "2.3.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0"
 }
 
 kotlin {
-    jvmToolchain(24)
+    jvmToolchain(25)
 }
 
 group = "net.incongru.brewery"
@@ -21,10 +22,11 @@ kotlin {
             dependencies {
 //                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1") // Replace with your actual dependency
             }
-        }}
+        }
+    }
     listOf(
         macosArm64(), // Mac M1
-        macosX64(), // Mac Legacy
+        macosX64(),   // Mac Legacy
     ).forEach { nativeTarget ->
         nativeTarget.apply {
             binaries {
