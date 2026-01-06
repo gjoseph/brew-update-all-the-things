@@ -45,7 +45,7 @@ tasks.register<Exec>("macosUniversalBinary") {
 
     onlyIf { System.getProperty("os.name").lowercase().contains("mac") }
     dependsOn("build")
-    val output = layout.buildDirectory.file("macos-universal/brew-update-all-the-things").get().asFile
+    val output = layout.buildDirectory.file("bin/macos-universal/brew-update-all-the-things").get().asFile
     output.parentFile.mkdirs()
 
     commandLine(
