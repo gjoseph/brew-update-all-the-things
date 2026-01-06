@@ -1,0 +1,11 @@
+[tools]
+java = "temurin-25.0.1+8.0.LTS"
+gradle = "9.2.1"
+
+[tasks.build]
+description = "Build the KMP project"
+run = "./gradlew build"
+
+[tasks.test]
+description = "Run all KMP tests"
+run = "./gradlew allTests"
