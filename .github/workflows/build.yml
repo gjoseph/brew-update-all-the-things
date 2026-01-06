@@ -16,8 +16,7 @@ jobs:
       - uses: jdx/mise-action@v3
         with:
           install: true
-          # Recommended for GitHub API rate limits in CI
-          # github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: gradle/actions/wrapper-validation@v4
       - name: Build
         run: ./gradlew macosUniversalBinary
