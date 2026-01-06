@@ -39,16 +39,19 @@ kotlin {
     }
 }
 
-tasks.register("createUniversalBinary", Exec::class) {
-    // Only run on macOS, where 'lipo' is available.
+tasks.register<Exec>("macosUniversalBinary") {
+    group = "Build"
+    description = "Assembles the outputs of macosArm64MainBinaries and macosX64MainBinaries in a universal binary. Only runs on Macos, where `/usr/bin/lipo` is available."
+
     onlyIf { System.getProperty("os.name").lowercase().contains("mac") }
-    val output = layout.buildDirectory.file("macos-universal/brew-update-all-the-things").get().asFile
+    dependsOn("build")
+    val output = layout.buildDirectory.file("bin/macos-universal/brew-update-all-the-things").get().asFile
     output.parentFile.mkdirs()
 
     commandLine(
         "lipo",
         "-create",
-        // TODO get those from above
+        // TODO get those from above rather than hardcode paths
         "build/bin/macosArm64/releaseExecutable/brew-update-all-the-things.kexe",
         "build/bin/macosX64/releaseExecutable/brew-update-all-the-things.kexe",
         "-output", output
