@@ -1,4 +1,5 @@
 name: Release
+run-name: Release v${{ inputs.version }}
 
 on:
   workflow_dispatch:
@@ -10,9 +11,11 @@ on:
 
 jobs:
   release:
-    name: Create Release
+    name: Release
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
