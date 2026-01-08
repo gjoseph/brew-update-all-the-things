@@ -80,8 +80,8 @@ fun main() {
     "brew update".runCommand()
 
     val outdated = "brew outdated --greedy --json".runCommandAndCaptureOutputAs<BrewOutdatedOutput>()
-    log("List of outdated formulae: ${outdated.formulae}")
-    log("List of outdated casks: ${outdated.casks}")
+    log("Outdated formulae: ${outdated.formulae}")
+    log("Outdated casks: ${outdated.casks}")
     val formulaeToUpdate = outdated.formulae
     val casksToUpdate = outdated.casks.filterNot { it.name == "microsoft-excel" }
 
