@@ -1,4 +1,4 @@
-name: Brew Update All The Things -- Build
+name: Build
 
 on:
   push:
