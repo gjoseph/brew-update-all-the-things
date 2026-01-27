@@ -47,6 +47,7 @@ private fun runUpgrade(dryRun: Boolean, formulae: List<BrewFormula>, casks: List
 
     log("Brew doctor$logSuffix")
     if ("brew doctor".runCommand(!dryRun) != 0) {
+        // TODO user feedback instead of exit on fail with no user feedback
         log("... the doc wasn't happy 🧑")
     }
 }
@@ -64,24 +65,31 @@ private data class BrewFormula(
     }
 }
 
+private fun List<BrewFormula>.asCliArgs(): String {
+    return this.joinToString(separator = " ", transform = { it.name })
+}
+
+private fun List<BrewFormula>.bulletListOfUpdates(): String {
+    return this.joinToString(separator = "\n", transform = { "* ${it.toString()}" })
+}
+
 @Serializable
 private data class BrewOutdatedOutput(
     val formulae: List<BrewFormula>,
     val casks: List<BrewFormula>
 )
 
-private fun List<BrewFormula>.asCliArgs(): String {
-    return this.joinToString(" ") { it.name }
-}
-
 fun main() {
     notif("Brew upgrade starting 😊")
     log("Updating Homebrew:")
     "brew update".runCommand()
+    // TODO report updates, particularly if brew itself was updated (recent updates show a changelog)
 
     val outdated = "brew outdated --greedy --json".runCommandAndCaptureOutputAs<BrewOutdatedOutput>()
     log("Outdated formulae: ${outdated.formulae}")
     log("Outdated casks: ${outdated.casks}")
+    // TODO configurable exclusions
+    // TODO configurable schedules: e.g maybe we don't need to update docker-desktop every time
     val formulaeToUpdate = outdated.formulae
     val casksToUpdate = outdated.casks.filterNot { it.name == "microsoft-excel" }
 
@@ -95,14 +103,17 @@ fun main() {
         "brew fetch --cask ${casksToUpdate.asCliArgs()}".runCommand()
     }
 
+    log("Update and download done.")
     if (formulaeToUpdate.isNotEmpty() || casksToUpdate.isNotEmpty()) {
+        log("Brew upgrade dry-run:")
         runUpgrade(true, formulaeToUpdate, casksToUpdate)
-
-        log("Update and download done.")
+        log("Brew upgrade dry-run done")
 
         if (confirm(
-                "Outdated formulae: ${formulaeToUpdate}\n" +
-                        "Outdated casks: ${casksToUpdate}\n\n" +
+                // TODO nicer formatting - perhaps a kotlin native + swift dialog ? (or more lazily, invoke https://github.com/swiftDialog/swiftDialog)
+                // https://kotlinlang.org/compose-multiplatform/
+                "Outdated formulae: ${formulaeToUpdate.bulletListOfUpdates()}\n" +
+                        "Outdated casks: ${casksToUpdate.bulletListOfUpdates()}\n\n" +
                         "Do you want to install them now?"
             )
         ) {
@@ -116,4 +127,3 @@ fun main() {
         notif(".... there was nothing to upgrade 😏")
     }
 }
-
