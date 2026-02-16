@@ -6,6 +6,12 @@ bash, and not my script itself. That started to feel like I was opening my machi
 of abuse.
 Remembering how easy it is to run shell commands in Kotlin, I figured I'd give kotlin native a go.
 
+# Configuration
+On OSX: ~/Library/Preferences/buatt/buatt.toml
+```
+ignored = ["microsoft-excel"]
+```
+TODO: CLI to show/create config file (perhaps the same that initialises launchagent...)
 
 TODO Setup launchagent
  - see https://github.com/vinceglb/AutoLaunch/blob/main/auto-launch/src/commonMain/kotlin/io/github/vinceglb/autolaunch/AutoLaunch.kt
