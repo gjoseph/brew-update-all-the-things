@@ -1,6 +1,6 @@
 [tools]
 java = "temurin-25.0.4+7.0.LTS"
-gradle = "9.6.1"
+gradle = "9.7.0"
 
 [tasks."build:macos"]
 run='''gradle macosUniversalBinary'''
