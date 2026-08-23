@@ -2,9 +2,10 @@ package net.incongru.brewt
 
 class ApplescriptHelper(val sh: Shell) {
     fun notif(message: String) {
+        // Close the shell single-quote, add an escaped quote, reopen: it's → it'\''s
         runAppleScript(
             """
-        display notification "$message" with title "🥜Brew upgrade" sound name "Frog"
+        display notification "${quote(message)}" with title "🥜Brew upgrade" sound name "Frog"
     """
         ).orThrow()
     }
@@ -13,10 +14,15 @@ class ApplescriptHelper(val sh: Shell) {
         // if we have a cancel button, we can use exit code of the process since it yields an error
         return runAppleScript(
             """
-        display alert "🥜 Brew upgrade" message "$message" buttons {"No", "🥜 Yes"} default button 2 cancel button 1
+        display alert "🥜 Brew upgrade" message "${quote(message)}" buttons {"No", "🥜 Yes"} default button 2 cancel button 1
         """,
             noOutput = true
         ).ok
+    }
+
+    private fun quote(message: String): String {
+        val quotedMessage = message.replace("'", "'\\''")
+        return quotedMessage
     }
 
     private fun runAppleScript(script: String, noOutput: Boolean = false): ShellResult {
