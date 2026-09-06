@@ -1,6 +1,8 @@
 plugins {
     kotlin("multiplatform") version "2.4.10"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.4.10"
+    id("io.kotest") version "6.2.0"
+    id("com.google.devtools.ksp") version "2.3.9"
 }
 
 kotlin {
@@ -16,6 +18,10 @@ repositories {
 }
 
 kotlin {
+    // JVM target exists purely for fast common-layer test feedback (`./gradlew jvmTest`).
+    // The shipped artifact is the native macOS binary; this is not distributed.
+    jvm()
+
     sourceSets {
         commonMain {
             dependencies {
@@ -24,6 +30,21 @@ kotlin {
                 implementation("com.akuleshov7:ktoml-file:0.7.1")
                 implementation("ca.gosyer:kotlin-multiplatform-appdirs:2.0.0")
                 implementation("com.github.ajalt.clikt:clikt:5.1.0")
+                implementation("com.squareup.okio:okio:3.16.2")
+            }
+        }
+        commonTest {
+            dependencies {
+                // implementation(kotlin("test"))
+                implementation("io.kotest:kotest-framework-engine:6.2.1")
+                implementation("io.kotest:kotest-assertions-core:6.2.1")
+                implementation("org.xmlunit:xmlunit-core:2.12.0")
+            }
+        }
+        // JVM runs Kotest specs via the JUnit Platform engine (JVM-only artifact).
+        jvmTest {
+            dependencies {
+                implementation("io.kotest:kotest-runner-junit5:6.2.1")
             }
         }
     }
@@ -40,6 +61,11 @@ kotlin {
             }
         }
     }
+}
+
+// Kotest on the JVM target runs on the JUnit Platform, not the default JUnit 4.
+tasks.named<Test>("jvmTest") {
+    useJUnitPlatform()
 }
 
 tasks.register<Exec>("macosUniversalBinary") {
